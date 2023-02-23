@@ -1,5 +1,6 @@
-use std::error::Error;
+use std::{error::Error, fs::File, io::Write, collections::HashMap};
 
+use kml::{Kml, KmlWriter, types::{Point, Placemark, LineString, Geometry, AltitudeMode, Coord}};
 use serde::{Deserialize, Serialize, de::Unexpected};
 
 fn bool_from_int<'de, D>(deserializer: D) -> Result<bool, D::Error>
@@ -243,6 +244,26 @@ pub struct BlackBoxTick {
 
 }
 
+pub fn generate_kml_of_flight(output_file: &String, data: &Vec<BlackBoxTick>) {
+    let points: Vec<Coord> = data.iter().map(|tick| {
+        Coord::new(tick.longitude_deg, tick.latitude_deg, Some(tick.gps_altitude_feet))
+    }).collect();
+    // Create a KML document of the flight from the vector of points    
+    let document = Kml::Document{
+        attrs: HashMap::new(),
+        elements: vec!(Kml::Placemark (
+            Placemark {
+                description: None,
+                geometry: Some(Geometry::LineString(LineString::from(points))),
+                ..Default::default()
+            }
+        )).into(),
+    };
+    // Write the KML document to a file
+    let mut file = File::create(output_file).unwrap();
+    file.write_all(document.to_string().as_bytes()).unwrap();
+}
+
 // read csv data from file
 pub fn read_csv_data(filename: &str) -> Result<Vec<BlackBoxTick>, Box<dyn Error>> {
     let mut rdr = csv::Reader::from_path(filename)?;
@@ -252,15 +273,4 @@ pub fn read_csv_data(filename: &str) -> Result<Vec<BlackBoxTick>, Box<dyn Error>
         data.push(record);
     }
     Ok(data)
-}
-
-#[cfg(test)]
-mod tests {
-    // use super::*;
-
-    // #[test]
-    // fn it_works() {
-    //     let result = add(2, 2);
-    //     assert_eq!(result, 4);
-    // }
 }
