@@ -12,13 +12,13 @@ fn main() {
                 point_count += 1;
             }
             Err(e) => {
-                println!("Error: {}", e);
+                println!("Error: {e}");
                 err_count += 1;
             }
         }
     }
-    println!("point_count: {}", point_count);
-    println!("err_count: {}", err_count);
+    println!("point_count: {point_count}");
+    println!("err_count: {err_count}");
     let output_file_name = "sample_out.kml".to_string();
     generate_kml_of_flight(&output_file_name, &data);
 }

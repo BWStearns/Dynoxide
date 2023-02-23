@@ -1,6 +1,6 @@
 use std::{error::Error, fs::File, io::Write, collections::HashMap};
 
-use kml::{Kml, KmlWriter, types::{Point, Placemark, LineString, Geometry, AltitudeMode, Coord}};
+use kml::{Kml, types::{Placemark, LineString, Geometry, Coord}};
 use serde::{Deserialize, Serialize, de::Unexpected};
 
 fn bool_from_int<'de, D>(deserializer: D) -> Result<bool, D::Error>
@@ -257,7 +257,7 @@ pub fn generate_kml_of_flight(output_file: &String, data: &Vec<BlackBoxTick>) {
                 geometry: Some(Geometry::LineString(LineString::from(points))),
                 ..Default::default()
             }
-        )).into(),
+        )),
     };
     // Write the KML document to a file
     let mut file = File::create(output_file).unwrap();
@@ -273,4 +273,19 @@ pub fn read_csv_data(filename: &str) -> Result<Vec<BlackBoxTick>, Box<dyn Error>
         data.push(record);
     }
     Ok(data)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_read_csv_data() {
+        let data = read_csv_data("flight_data/first_solo_black_box.csv").unwrap();
+        assert_eq!(data.len(), 25485);
+        assert_eq!(data[0].latitude_deg, 27.14215);
+        assert_eq!(data[0].longitude_deg, -82.47485);
+        assert_eq!(data[0].gps_altitude_feet, 2563.0);
+        assert_eq!(data[0].ground_speed_knots, 91.6);
+    }
 }

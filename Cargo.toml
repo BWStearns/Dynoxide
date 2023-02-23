@@ -1,7 +1,16 @@
 [package]
 name = "dynoxide"
-version = "0.1.0"
+version = "0.0.1"
 edition = "2021"
+description = "Rust tools for working with Dynon SkyView black box data."
+homepage = "https://github.com/BWStearns/Dynoxide"
+repository = "https://github.com/BWStearns/Dynoxide"
+readme = "README.md"
+license = "MIT"
+categories = ["aerospace", "science::geo"]
+keywords = ["Dynon", "blackbox", "parser", "SkyView"]
+authors = ["Brian Stearns <brianw.stearns@gmail.com>"]
+
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
