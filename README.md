@@ -1,4 +1,7 @@
-# Dynoxide
+# Dynoxide &emsp; [![Latest Version]][crates.io]
+
+[Latest Version]: https://img.shields.io/crates/v/circadian_tools.svg
+[crates.io]: https://crates.io/crates/circadian\_tools
 
 **Still a work in progress and I will break the API in the future**
 
