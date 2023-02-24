@@ -18,7 +18,7 @@ Here's an image of the KML generated from the sample blackbox data:
 
 I've also added a function to output KML from the black box data. Here's a simple example of how to use the library to generate KML from a blackbox file. The output will load into Google Earth and give you a nice 3D view of your flight.
 
-```
+```rust
 use dynoxide::*;
 
 fn main() {
