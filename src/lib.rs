@@ -252,7 +252,7 @@ pub fn generate_kml_of_flight(output_file: &String, data: &Vec<BlackBoxTick>) {
     let linestring = LineString{
         coords: points,
         attrs: HashMap::new(),
-        extrude: true,
+        extrude: false,
         altitude_mode: AltitudeMode::Absolute,
         tessellate: true,
     };
