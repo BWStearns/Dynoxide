@@ -1,6 +1,6 @@
 use std::{error::Error, fs::File, io::Write, collections::HashMap};
 
-use kml::{Kml, types::{Placemark, LineString, Geometry, Coord}};
+use kml::{Kml, types::{Placemark, LineString, Geometry, Coord, AltitudeMode}};
 use serde::{Deserialize, Serialize, de::Unexpected};
 
 fn bool_from_int<'de, D>(deserializer: D) -> Result<bool, D::Error>
@@ -249,12 +249,19 @@ pub fn generate_kml_of_flight(output_file: &String, data: &Vec<BlackBoxTick>) {
         Coord::new(tick.longitude_deg, tick.latitude_deg, Some(tick.gps_altitude_feet))
     }).collect();
     // Create a KML document of the flight from the vector of points    
+    let linestring = LineString{
+        coords: points,
+        attrs: HashMap::new(),
+        extrude: true,
+        altitude_mode: AltitudeMode::Absolute,
+        tessellate: true,
+    };
     let document = Kml::Document{
         attrs: HashMap::new(),
         elements: vec!(Kml::Placemark (
             Placemark {
                 description: None,
-                geometry: Some(Geometry::LineString(LineString::from(points))),
+                geometry: Some(Geometry::LineString(linestring)),
                 ..Default::default()
             }
         )),
